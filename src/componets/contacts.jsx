@@ -1,11 +1,21 @@
 import  { useState, useEffect } from 'react';
 import './Contacts.css'
 import { auth, db } from "../config/firebase";
+import {signOut} from "firebase/auth";
 
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import {
+    Box,
+    Button,
+    Container,
+    Heading,
+    Input,
+    Flex,
+    useToast,
+  } from '@chakra-ui/react';
 
-function Contacts() {
-    
+export default function Contacts() {
+    const toast = useToast();
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -82,65 +92,124 @@ function Contacts() {
                 alert(err);
             });
     }
+    const logout = async () => {
+        try {
+          await signOut(auth);
+          toast({
+            title: 'Success',
+            description: 'Signed out successfully. Bye!.',
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          });
+           // Redirect if successful
+            window.location.href = '/';
+        } catch (err) {
+          console.error(err);
+          toast({
+            title: 'Error',
+            description: 'There was an error signing out. Please try again later.',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+    }
 
     return (
-        <div className='App1'>
-            <div className='title'>
-                <h1>CONTACTS</h1>
-                <button className="button2" onClick={() => setShowOverlay(true)}>Add Contact</button>
-            </div>
-            {contacts.map(contact => (
-                <div className="contact-container" key={contact.id}>
-                    <p>{contact.name}</p>
-                    <p>{contact.email}</p>
-                    <p>{contact.number}</p>
-                    <div className="contact-actions">
-                        <button onClick={() => handleEdit(contact.id)}>Edit</button>
-                        <button onClick={() => deleteData(contact.id)}>Delete</button>
-                    </div>
-                </div>
-            ))}
-
-            {showOverlay && (
-                <div className="overlay">
-                    <input
-                        className="input-field"
-                        type="text"
-                        name='name'
-                        placeholder='name'
-                        value={data.name}
-                        onChange={handleInputs}
-                    />
-                    <input
-                        className="input-field"
-                        type="email"
-                        name='email'
-                        placeholder='email'
-                        value={data.email}
-                        onChange={handleInputs}
-                    />
-                    <input
-                        className="input-field"
-                        type="tel"
-                        name='number'
-                        placeholder='number'
-                        value={data.number}
-                        onChange={handleInputs}
-                    />
-                    {editContactId !== null ? (
-                        <button onClick={handleUpdate}>Update</button>
-                    ) : (
-                        <button onClick={handleSubmit}>Add</button>
-                    )}
-                    <button onClick={() => {
-                        setShowOverlay(false);
-                        setData({ name: '', email: '', number: '' });
-                        setEditContactId(null);
-                    }}>Cancel</button>
-                </div>
+        <Container w={"100vw"} mt="2" ml={"350px"} h={"100vh"}>
+        <Flex justify="space-between" align="center" mb="10">
+          <Flex justify="space-around" align="center" >
+            <Heading size="xl">CONTACTS</Heading>
+            <Button colorScheme="teal" onClick={() => setShowOverlay(true)}>
+                Add Contact
+            </Button>
+          </Flex>
+          <Button colorScheme="teal" alignSelf={'center'} onClick={logout}>
+            Sign Out
+           </Button>
+        </Flex>
+        {contacts.map((contact) => (
+          <Box
+            key={contact.id}
+            bg="gray.100"
+            borderWidth="1px"
+            borderRadius="lg"
+            p="4"
+            mb="4"
+          >
+            <p>{contact.name}</p>
+            <p>{contact.email}</p>
+            <p>{contact.number}</p>
+            <Flex justify="flex-end">
+              <Button onClick={() => handleEdit(contact.id)} mr="2" colorScheme='yellow'>
+                Edit
+              </Button>
+              <Button onClick={() => deleteData(contact.id)} colorScheme='red'>Delete</Button>
+            </Flex>
+          </Box>
+        ))}
+        {showOverlay && (
+          <Box
+            bg="rgba(0, 0, 0, 0.9)"
+            pos="fixed"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
+            p="4"
+            borderRadius="lg"
+            boxShadow="0 0 10px rgba(0, 0, 0, 0.3)"
+            zIndex="1000"
+            w="300px"
+          >
+            <Input
+              type="text"
+              name="name"
+              placeholder="name"
+              value={data.name}
+              onChange={handleInputs}
+              mb="2"
+              color={"white"}
+            />
+            <Input
+              type="email"
+              name="email"
+              placeholder="email"
+              value={data.email}
+              onChange={handleInputs}
+              mb="2"
+              color={"white"}
+            />
+            <Input
+              type="tel"
+              name="number"
+              placeholder="number"
+              value={data.number}
+              onChange={handleInputs}
+              mb="2"
+              color={"white"}
+            />
+            {editContactId !== null ? (
+              <Button colorScheme="teal" onClick={handleUpdate} mr="2">
+                Update
+              </Button>
+            ) : (
+              <Button colorScheme="teal" onClick={handleSubmit} mr="2">
+                Add
+              </Button>
             )}
-        </div>
+            <Button
+              colorScheme="red"
+              onClick={() => {
+                setShowOverlay(false);
+                setData({ name: '', email: '', number: '' });
+                setEditContactId(null);
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
+        )}
+      </Container>
     );
 }
-
-export default Contacts;

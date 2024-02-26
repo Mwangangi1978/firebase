@@ -73,14 +73,14 @@ export default function Login() {
     return(
         <> 
             <Box
-            
+                ml={"300px"}
                 backgroundSize="cover"
                 backgroundPosition="center"
                 height="100vh"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-            
+                
             >
                 <Box
                     p={6}
@@ -88,6 +88,7 @@ export default function Login() {
                     boxShadow="md"
                     textAlign="center"
                     width={'50vw'}
+                    
                 >
                     
                     <>  

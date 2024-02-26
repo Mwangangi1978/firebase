@@ -13,6 +13,7 @@ const App = () => {
        {/* Add more routes here */}
      </Routes>
    </Router>
+   
   );
 }
 
