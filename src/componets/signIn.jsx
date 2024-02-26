@@ -5,27 +5,60 @@ import {
   signInWithPopup,
   /* signOut, */
 } from "firebase/auth";
-import { Input, FormLabel, FormControl, Button, Box, Text} from "@chakra-ui/react";
+import { Input, FormLabel, FormControl, Button, Box, Text, useToast} from "@chakra-ui/react";
 
 
 
 export default function Login() {
-    const [email, setEmail] = useState("");
+  const toast = useToast();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const signIn = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
+      toast({
+        title: 'Success',
+        description: 'Logged in successfully. Welcome!.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      // Redirect if successful
+      window.location.href = '/contacts';
     } catch (err) {
       console.error(err);
+      toast({
+        title: 'Error',
+        description: 'There was an error logging in. Please try again later.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
+      toast({
+        title: 'Success',
+        description: 'Logged in successfully. Welcome!.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      });
+      // Redirect if successful
+      window.location.href = '/contacts';
     } catch (err) {
       console.error(err);
+      toast({
+        title: 'Error',
+        description: 'There was an error logging in. Please try again later.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
