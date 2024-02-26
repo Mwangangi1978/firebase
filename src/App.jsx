@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignIn from './componets/signIn'
-import Contacts from './componets/contacts'
+import Contacts from './componets/Contacts'
 
 
 const App = () => {

@@ -1,5 +1,4 @@
 import  { useState, useEffect } from 'react';
-import './Contacts.css'
 import { auth, db } from "../config/firebase";
 import {signOut} from "firebase/auth";
 
