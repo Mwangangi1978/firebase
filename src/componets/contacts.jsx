@@ -1,11 +1,11 @@
 import  { useState, useEffect } from 'react';
 import './Contacts.css'
-import { app, database } from "../config/firebase";
-import { getAuth } from 'firebase/auth';
+import { auth, db } from "../config/firebase";
+
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 function Contacts() {
-    let auth = getAuth();
+    
     const [data, setData] = useState({
         name: '',
         email: '',
@@ -20,7 +20,7 @@ function Contacts() {
     }, []);
 
     const fetchData = async () => {
-        const dataSnapshot = await getDocs(collection(database, "contacts"));
+        const dataSnapshot = await getDocs(collection(db, "contacts"));
         setContacts(dataSnapshot.docs.map((item) => ({ ...item.data(), id: item.id })));
     }
 
@@ -33,7 +33,7 @@ function Contacts() {
     };
 
     const handleSubmit = () => {
-        addDoc(collection(database, "contacts"), {
+        addDoc(collection(db, "contacts"), {
             name: data.name,
             email: data.email,
             number: parseInt(data.number)
@@ -57,7 +57,7 @@ function Contacts() {
     };
 
     const handleUpdate = () => {
-        const dataToUpdate = doc(database, "contacts", editContactId);
+        const dataToUpdate = doc(db, "contacts", editContactId);
         updateDoc(dataToUpdate, { ...data })
             .then(() => {
                 alert("Data updated");
@@ -72,7 +72,7 @@ function Contacts() {
     };
 
     const deleteData = (id) => {
-        const dataToDelete = doc(database, 'contacts', id);
+        const dataToDelete = doc(db, 'contacts', id);
         deleteDoc(dataToDelete)
             .then(() => {
                 alert("Data Deleted");
