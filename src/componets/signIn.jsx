@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from "../config/firebase";
 import {
   createUserWithEmailAndPassword,
@@ -10,6 +11,8 @@ import { Input, FormLabel, FormControl, Button, Box, Text, useToast} from "@chak
 
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +28,7 @@ export default function Login() {
         isClosable: true,
       });
       // Redirect if successful
-      window.location.href = '/contacts';
+      navigate('/contacts'); 
     } catch (err) {
       console.error(err);
       toast({
@@ -49,7 +52,7 @@ export default function Login() {
         isClosable: true,
       });
       // Redirect if successful
-      window.location.href = '/contacts';
+      navigate('/contacts'); 
     } catch (err) {
       console.error(err);
       toast({

@@ -1,6 +1,8 @@
 import  { useState, useEffect } from 'react';
 import { auth, db } from "../config/firebase";
 import {signOut} from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
+
 
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import {
@@ -14,6 +16,7 @@ import {
   } from '@chakra-ui/react';
 
 export default function Contacts() {
+    const navigate = useNavigate();
     const toast = useToast();
     const [data, setData] = useState({
         name: '',
@@ -102,7 +105,7 @@ export default function Contacts() {
             isClosable: true,
           });
            // Redirect if successful
-            window.location.href = '/';
+           navigate('/'); 
         } catch (err) {
           console.error(err);
           toast({
